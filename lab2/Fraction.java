@@ -88,7 +88,7 @@ class Fraction {
    */
   public int fracs() {                         // DO NOT CHANGE THIS SIGNATURE!
     // Fix the bug that prevents this method from working correctly.
-    return this.numberOfFractions;
+    return numberOfFractions;
   }
 
   /** Computes the greatest common divisor (gcd) of the two inputs.
