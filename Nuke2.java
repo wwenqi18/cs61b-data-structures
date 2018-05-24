@@ -2,7 +2,7 @@
 
 import java.io.*;
 
-/** 
+/**  
 A class that provides a main function to read a string from the keyboard 
 and to print the same string with its second character removed. The input
 must be at least 2 characters long. 
