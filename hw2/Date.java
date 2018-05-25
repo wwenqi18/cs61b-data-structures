@@ -5,6 +5,9 @@ import java.io.*;
 class Date {
 
 	/* Put your private data fields here. */
+		private int month;
+		private int day;
+		private int year;
 
   /** Constructs a date with the given month, day and year.   If the date is
    *  not valid, the entire program will halt with an error message.
@@ -13,7 +16,14 @@ class Date {
    *  @param year is the year in question, with no digits omitted.
    */
   public Date(int month, int day, int year) {
-
+			if (isValidDate(month, day, year)) {
+					this.month = month;
+					this.day = day;
+					this.year = year;
+			} else {
+					System.out.println("Not a valid date");
+					System.exit(0);
+			}
   }
 
   /** Constructs a Date object corresponding to the given string.
@@ -23,7 +33,7 @@ class Date {
    *  a valid date, the program halts with an error message.
    */
   public Date(String s) {
-
+			
   }
 
   /** Checks whether the given year is a leap year.
@@ -71,7 +81,7 @@ class Date {
 			if (month < 1 || month > 12) {
 					return false;
 			}
-			if (day < 1 || day > 31) {
+			if (day < 1 || day > daysInMonth(month, year)) {
 					return false;
 			}
 			return true;
@@ -83,21 +93,33 @@ class Date {
    *  @return a String representation of this date.
    */
   public String toString() {
-    return "stuff";                     // replace this line with your solution
+    return month + "/" + day + "/" + year;
   }
 
   /** Determines whether this Date is before the Date d.
    *  @return true if and only if this Date is before d. 
    */
   public boolean isBefore(Date d) {
-    return true;                        // replace this line with your solution
+			if (this.year < d.year) {
+					return true;
+			}
+			if (this.year == d.year) {
+					if (this.month < d.month) {
+							return true;
+					}
+					if (this.month == d.month) {
+							return this.day < d.day;
+					}
+					return false;
+			}
+			return false;
   }
 
   /** Determines whether this Date is after the Date d.
    *  @return true if and only if this Date is after d. 
    */
   public boolean isAfter(Date d) {
-    return true;                        // replace this line with your solution
+			return !this.isBefore(d) && this.day != d.day;
   }
 
   /** Returns the number of this Date in the year.
@@ -106,7 +128,16 @@ class Date {
    *  year.)
    */
   public int dayInYear() {
-    return 0;                           // replace this line with your solution
+			int n = 0;
+			if (this.month == 1) {
+					n = this.day;
+			} else {
+					for (int i = 1; i < month; i++) {
+							n += daysInMonth(this.month, this.year);
+					}
+					n += this.day;
+			}
+			return n;
   }
 
   /** Determines the difference in days between d and this Date.  For example,
@@ -115,7 +146,24 @@ class Date {
    *  @return the difference in days between d and this date.
    */
   public int difference(Date d) {
-    return 0;                           // replace this line with your solution
+			int diff = 0;
+			int sign = -1;
+			Date early = this;
+			Date late = d;
+			if (this.isAfter(d)) {
+					early = d;
+					late = this;
+					sign = 1;
+			}
+			for (int i = early.year; i < late.year; i++) {
+					if (isLeapYear(i)) {
+							diff += 366;
+					} else {
+							diff += 365;
+					}
+			}			
+			diff += late.dayInYear();
+			return diff * sign;
   }
 
   public static void main(String[] argv) {
