@@ -33,7 +33,22 @@ class Date {
    *  a valid date, the program halts with an error message.
    */
   public Date(String s) {
-			
+			String[] pieces = s.split("/");
+			if (pieces.length != 3) {
+					System.out.println("Not a valid date");
+					System.exit(0);
+			}
+			int month = Integer.parseInt(pieces[0]);
+			int day = Integer.parseInt(pieces[1]);
+			int year = Integer.parseInt(pieces[2]);
+			if (isValidDate(month, day, year)) {
+					this.month = month;
+					this.day = day;
+					this.year = year;
+			} else {
+					System.out.println("Not a valid date");
+					System.exit(0);
+			}
   }
 
   /** Checks whether the given year is a leap year.
@@ -133,7 +148,7 @@ class Date {
 					n = this.day;
 			} else {
 					for (int i = 1; i < month; i++) {
-							n += daysInMonth(this.month, this.year);
+							n += daysInMonth(i, this.year);
 					}
 					n += this.day;
 			}
@@ -162,7 +177,7 @@ class Date {
 							diff += 365;
 					}
 			}			
-			diff += late.dayInYear();
+			diff = diff - early.dayInYear() + late.dayInYear();
 			return diff * sign;
   }
 
