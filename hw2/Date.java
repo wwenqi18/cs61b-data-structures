@@ -5,9 +5,9 @@ import java.io.*;
 class Date {
 
 	/* Put your private data fields here. */
-		private int month;
-		private int day;
-		private int year;
+    private int month;
+    private int day;
+    private int year;
 
   /** Constructs a date with the given month, day and year.   If the date is
    *  not valid, the entire program will halt with an error message.
@@ -16,14 +16,14 @@ class Date {
    *  @param year is the year in question, with no digits omitted.
    */
   public Date(int month, int day, int year) {
-			if (isValidDate(month, day, year)) {
-					this.month = month;
-					this.day = day;
-					this.year = year;
-			} else {
-					System.out.println("Not a valid date");
-					System.exit(0);
-			}
+      if (isValidDate(month, day, year)) {
+	  this.month = month;
+	  this.day = day;
+	  this.year = year;
+      } else {
+	  System.out.println("Not a valid date");
+	  System.exit(0);
+      }
   }
 
   /** Constructs a Date object corresponding to the given string.
@@ -33,35 +33,35 @@ class Date {
    *  a valid date, the program halts with an error message.
    */
   public Date(String s) {
-			String[] pieces = s.split("/");
-			if (pieces.length != 3) {
-					System.out.println("Not a valid date");
-					System.exit(0);
-			}
-			int month = Integer.parseInt(pieces[0]);
-			int day = Integer.parseInt(pieces[1]);
-			int year = Integer.parseInt(pieces[2]);
-			if (isValidDate(month, day, year)) {
-					this.month = month;
-					this.day = day;
-					this.year = year;
-			} else {
-					System.out.println("Not a valid date");
-					System.exit(0);
-			}
+      String[] pieces = s.split("/");
+      if (pieces.length != 3) {
+	  System.out.println("Not a valid date");
+	  System.exit(0);
+      }
+      int month = Integer.parseInt(pieces[0]);
+      int day = Integer.parseInt(pieces[1]);
+      int year = Integer.parseInt(pieces[2]);
+      if (isValidDate(month, day, year)) {
+	  this.month = month;
+	  this.day = day;
+	  this.year = year;
+      } else {
+	  System.out.println("Not a valid date");
+	  System.exit(0);
+      }
   }
 
   /** Checks whether the given year is a leap year.
    *  @return true if and only if the input year is a leap year.
    */
   public static boolean isLeapYear(int year) {
-			if (year % 400 == 0) {
-					return true;
-			}
-			if (year % 4 == 0 && year % 100 != 0) {
-					return true;
-			}
-			return false;
+      if (year % 400 == 0) {
+	  return true;
+      }
+      if (year % 4 == 0 && year % 100 != 0) {
+	  return true;
+      }
+      return false;
   }
 
   /** Returns the number of days in a given month.
@@ -70,18 +70,18 @@ class Date {
    *  @return the number of days in the given month.
    */
   public static int daysInMonth(int month, int year) {
-			switch (month) {
-			    case 2: if (isLeapYear(year)) {
-									    return 29;
-							    } else {
-									    return 28;
-							    }
-					case 4:
-					case 6:
-					case 9:
-					case 11: return 30;
-					default: return 31;
-			}
+      switch (month) {
+      case 2: if (isLeapYear(year)) {
+	      return 29;
+	  } else {
+	      return 28;
+	  }
+      case 4:
+      case 6:
+      case 9:
+      case 11: return 30;
+      default: return 31;
+      }
   }
 
   /** Checks whether the given date is valid.
@@ -90,16 +90,16 @@ class Date {
    *  Years prior to A.D. 1 are NOT valid.
    */
   public static boolean isValidDate(int month, int day, int year) {
-			if (year < 1) {
-					return false;
-			}
-			if (month < 1 || month > 12) {
-					return false;
-			}
-			if (day < 1 || day > daysInMonth(month, year)) {
-					return false;
-			}
-			return true;
+      if (year < 1) {
+	  return false;
+      }
+      if (month < 1 || month > 12) {
+	  return false;
+      }
+      if (day < 1 || day > daysInMonth(month, year)) {
+	  return false;
+      }
+      return true;
   }
 
   /** Returns a string representation of this date in the form month/day/year.
@@ -115,26 +115,26 @@ class Date {
    *  @return true if and only if this Date is before d. 
    */
   public boolean isBefore(Date d) {
-			if (this.year < d.year) {
-					return true;
-			}
-			if (this.year == d.year) {
-					if (this.month < d.month) {
-							return true;
-					}
-					if (this.month == d.month) {
-							return this.day < d.day;
-					}
-					return false;
-			}
-			return false;
+      if (this.year < d.year) {
+	  return true;
+      }
+      if (this.year == d.year) {
+	  if (this.month < d.month) {
+	      return true;
+	  }
+	  if (this.month == d.month) {
+	      return this.day < d.day;
+	  }
+	  return false;
+      }
+      return false;
   }
 
   /** Determines whether this Date is after the Date d.
    *  @return true if and only if this Date is after d. 
    */
   public boolean isAfter(Date d) {
-			return !this.isBefore(d) && this.day != d.day;
+      return !this.isBefore(d) && this.day != d.day;
   }
 
   /** Returns the number of this Date in the year.
@@ -143,16 +143,16 @@ class Date {
    *  year.)
    */
   public int dayInYear() {
-			int n = 0;
-			if (this.month == 1) {
-					n = this.day;
-			} else {
-					for (int i = 1; i < month; i++) {
-							n += daysInMonth(i, this.year);
-					}
-					n += this.day;
-			}
-			return n;
+      int n = 0;
+      if (this.month == 1) {
+	  n = this.day;
+      } else {
+	  for (int i = 1; i < month; i++) {
+	      n += daysInMonth(i, this.year);
+	  }
+	  n += this.day;
+      }
+      return n;
   }
 
   /** Determines the difference in days between d and this Date.  For example,
@@ -161,24 +161,24 @@ class Date {
    *  @return the difference in days between d and this date.
    */
   public int difference(Date d) {
-			int diff = 0;
-			int sign = -1;
-			Date early = this;
-			Date late = d;
-			if (this.isAfter(d)) {
-					early = d;
-					late = this;
-					sign = 1;
-			}
-			for (int i = early.year; i < late.year; i++) {
-					if (isLeapYear(i)) {
-							diff += 366;
-					} else {
-							diff += 365;
-					}
-			}			
-			diff = diff - early.dayInYear() + late.dayInYear();
-			return diff * sign;
+      int diff = 0;
+      int sign = -1;
+      Date early = this;
+      Date late = d;
+      if (this.isAfter(d)) {
+	  early = d;
+	  late = this;
+	  sign = 1;
+      }
+      for (int i = early.year; i < late.year; i++) {
+	  if (isLeapYear(i)) {
+	      diff += 366;
+	  } else {
+	      diff += 365;
+	  }
+      }			
+      diff = diff - early.dayInYear() + late.dayInYear();
+      return diff * sign;
   }
 
   public static void main(String[] argv) {
