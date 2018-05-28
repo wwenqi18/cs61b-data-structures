@@ -253,6 +253,83 @@ public class PixImage {
     }
     return intensity;
   }
+    
+    /**
+     *
+     */
+    private PixImage reflectImage() {
+	PixImage res = new PixImage(width + 2, height + 2);
+	// four corners
+	res.pixels[0][0] = this.pixels[0][0];
+	res.pixels[0][height + 1] = this.pixels[0][height - 1];
+	res.pixels[width + 1][0] = this.pixels[width - 1][0];
+	res.pixels[width + 1][height + 1] = this.pixels[width - 1][height - 1];
+
+	for (int x = 1; x <= width; x++) {  // reflect boundary columns
+	    res.pixels[x][0] = this.pixels[x - 1][0];
+	    res.pixels[x][height + 1] = this.pixels[x - 1][height - 1];
+	}
+	for (int y = 1; y <= height; y++) {  // reflect boundary rows
+	    res.pixels[0][y] = this.pixels[0][y - 1];
+	    res.pixels[width + 1][y] = this.pixels[width - 1][y - 1];
+	}
+	for (int x = 1; x <= width; x++) {  // fill in middle
+	    for (int y = 1; y <= height; y++) {
+		res.pixels[x][y] = this.pixels[x - 1][y - 1];
+	    }
+	}
+	return res;
+    }
+    
+    /**
+     *
+     */
+    private int[] gx(int x, int y) {
+	int red = 0, green = 0, blue = 0;
+	int[] coef = new int[] {1, 0, -1, 2, 0, -2, 1, 0, -1};
+	int idx = -1;
+	for (int i = x - 1; i <= x + 1; i++) {
+	    for (int j = y - 1; j <= y + 1; j++) {
+		idx++;
+		red += this.getRed(i, j) * coef[idx];
+		green += this.getGreen(i, j) * coef[idx];
+		blue += this.getBlue(i, j) * coef[idx];
+	    }
+	}
+	int[] grad = new int[] {red, green, blue};
+	return grad;
+    }
+
+    /**
+     *
+     */
+    private int[] gy(int x, int y) {
+        int red = 0, green = 0, blue = 0;
+        int[] coef = new int[] {1, 2, 1, 0, 0, 0, -1, -2, -1};
+        int idx = -1;
+        for (int i = x - 1; i <= x + 1; i++) {
+            for (int j = y - 1; j <= y + 1; j++) {
+                idx++;
+                red += this.getRed(i, j) * coef[idx];
+                green += this.getGreen(i, j) * coef[idx];
+                blue += this.getBlue(i, j) * coef[idx];
+            }
+        }
+        int[] grad = new int[] {red, green, blue};
+        return grad;
+    }
+
+    /**
+     *
+     */
+    private long energy(int x, int y) {
+	int[] gradx = this.gx(x, y);
+	int[] grady = this.gy(x, y);
+	long res = (long) gradx[0] * (long) gradx[0] + (long) grady[0] * (long) grady[0] + 
+	    (long) gradx[1] * (long) gradx[1] + (long) grady[1] * (long) grady[1] + 
+	    (long) gradx[2] * (long) gradx[2] + (long) grady[2] * (long) grady[2];
+	return res;
+    }
 
   /**
    * sobelEdges() applies the Sobel operator, identifying edges in "this"
@@ -270,10 +347,15 @@ public class PixImage {
    * Whiter pixels represent stronger edges.
    */
   public PixImage sobelEdges() {
-    // Replace the following line with your solution.
-    return this;
-    // Don't forget to use the method mag2gray() above to convert energies to
-    // pixel intensities.
+      PixImage ref = this.reflectImage();
+      PixImage res = new PixImage(width, height);
+      for (int x = 1; x <= width; x++) {
+	  for (int y = 1; y <= height; y++) {
+	      short intensity = mag2gray(ref.energy(x, y));
+	      res.setPixel(x - 1, y - 1, intensity, intensity, intensity);
+	  }
+      }
+      return res;
   }
 
 
@@ -377,12 +459,9 @@ public class PixImage {
            array2PixImage(new int[][] { { 91, 118, 146 },
                                         { 108, 134, 161 },
                                         { 125, 151, 176 } })),
-           "Incorrect box blur (2 rep):\n" + "output:\n " + image1.boxBlur(2));
-    System.out.println("solution:\n" + array2PixImage(new int[][] { { 91, 118, 146 },
-								    { 108, 134, 161 },
-								    { 125, 151, 176 } }));
+           "Incorrect box blur (2 rep):\n" + image1.boxBlur(2));
     doTest(image1.boxBlur(2).equals(image1.boxBlur(1).boxBlur(1)),
-           "Incorrect box blur (1 rep + 1 rep):\n" + "output:\n" +
+           "Incorrect box blur (1 rep + 1 rep):\n" +
            image1.boxBlur(2) + image1.boxBlur(1).boxBlur(1));
 
     System.out.println("Testing edge detection on a 3x3 image.");
