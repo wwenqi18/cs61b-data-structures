@@ -24,13 +24,42 @@
 import java.util.Iterator;
 
 public class RunLengthEncoding implements Iterable {
+    
+    /**
+     *
+     */
+    private class Run {
+	int red = 0;
+	int green = 0;
+	int blue = 0;
+	int runlength = 1;
+	
+	/**
+	 *
+	 */
+	private Run(int r, int g, int b, int runlen) {
+	    red = r;
+	    green = g;
+	    blue = b;
+	    runlength = runlen;
+	}
+
+	/**
+	 *
+	 */
+	private Run(int runlen) {
+	    runlength = runlen;
+	}
+    }
 
   /**
    *  Define any variables associated with a RunLengthEncoding object here.
    *  These variables MUST be private.
    */
-
-
+    int width = 0;
+    int height = 0;
+    int length = 0;
+    SList runs = new SList();
 
 
   /**
@@ -47,7 +76,10 @@ public class RunLengthEncoding implements Iterable {
    */
 
   public RunLengthEncoding(int width, int height) {
-    // Your solution here.
+      this.width = width;
+      this.height = height;
+      length = 1;
+      runs.insertFront(new Run(width * height));
   }
 
   /**
@@ -73,7 +105,32 @@ public class RunLengthEncoding implements Iterable {
 
   public RunLengthEncoding(int width, int height, int[] red, int[] green,
                            int[] blue, int[] runLengths) {
-    // Your solution here.
+      // test invariants
+      if ((red.length + green.length + blue.length + runLengths.length) / 4 != 
+	  runLengths.length) {
+	  System.out.println("Unequal input array lengths");
+	  System.exit(0);
+      }
+      if (red.length + green.length + blue.length + runLengths.length < 4) {
+	  System.out.println("Input arrays cannot have a zero length");
+	  System.exit(0);
+      }
+      int sum = 0;
+      for (int len : runLengths) {
+	  sum += len;
+      }
+      if (sum != width * height) {
+	  System.out.println("Runlengths not consistent with image dimension");
+	  System.exit(0);
+      }
+
+      this.width = width;
+      this.height = height;
+      this.length = width * height;
+      for (int i = 0; i < runLengths.length; i++) {
+	  Run add = new Run(red[i], green[i], blue[i], runLengths[i]);
+	  this.runs.insertEnd(add);
+      }
   }
 
   /**
@@ -82,10 +139,8 @@ public class RunLengthEncoding implements Iterable {
    *
    *  @return the width of the image that this run-length encoding represents.
    */
-
   public int getWidth() {
-    // Replace the following line with your solution.
-    return 1;
+      return width;
   }
 
   /**
@@ -95,8 +150,7 @@ public class RunLengthEncoding implements Iterable {
    *  @return the height of the image that this run-length encoding represents.
    */
   public int getHeight() {
-    // Replace the following line with your solution.
-    return 1;
+      return height;
   }
 
   /**

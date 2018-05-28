@@ -255,7 +255,12 @@ public class PixImage {
   }
     
     /**
+     * reflectImage() returns a reflected version of "this" PixImage
+     * where the image is reflected across each image boundary. For example, 
+     * we treat the pixel (-1, 2) as if it had the same RGB intensities as (0, 2).
+     * The resulted image has a dimension of width + 2 by height + 2.
      *
+     * @return the reflected image of "this" PixImage
      */
     private PixImage reflectImage() {
 	PixImage res = new PixImage(width + 2, height + 2);
@@ -282,7 +287,12 @@ public class PixImage {
     }
     
     /**
-     *
+     * gx() returns the gradient gx for the red, green, and blue intensities
+     * of the pixel at coordinate (x, y) in "this" PixImage
+     * 
+     * @param x the x-coordinate of the pixel
+     * @param y the y-coordinate of the pixel
+     * @return the gradient gx for the RGB intensities of the pixel (x, y)
      */
     private int[] gx(int x, int y) {
 	int red = 0, green = 0, blue = 0;
@@ -301,7 +311,12 @@ public class PixImage {
     }
 
     /**
+     * gy() returns the gradient gy for the red, green, and blue intensities
+     * of the pixel at coordinate (x, y) in "this" PixImage
      *
+     * @param x the x-coordinate of the pixel
+     * @param y the y-coordinate of the pixel
+     * @return the gradient gy for the RGB intensities of the pixel (x, y)
      */
     private int[] gy(int x, int y) {
         int red = 0, green = 0, blue = 0;
@@ -320,7 +335,14 @@ public class PixImage {
     }
 
     /**
+     * energy() returns the energy of the pixel at coordinate (x, y) in "this" 
+     * PixImage, which is defined to be the sum of the red, green, and blue energies 
+     * of the pixel at coordinate (x, y) in "this" PixImage. 
+     * The energy of a gradient vector is defined to be the square of its lengths.
      *
+     * @param x the x-coordinate of the pixel
+     * @param y the y-coordinate of the pixel
+     * @return the energy of the pixel at coordinate (x, y) in "this" PixImage
      */
     private long energy(int x, int y) {
 	int[] gradx = this.gx(x, y);

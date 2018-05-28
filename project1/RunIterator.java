@@ -36,7 +36,8 @@ public class RunIterator implements Iterator {
    *  Define any variables associated with a RunIterator object here.
    *  These variables MUST be private.
    */
-
+    private SList runs;
+    
 
 
 
